@@ -1,5 +1,8 @@
 package petrov.kristiyan.colorpicker;
 
+import static petrov.kristiyan.colorpicker.ColorUtils.dip2px;
+import static petrov.kristiyan.colorpicker.ColorUtils.getDimensionDp;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,9 +15,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -22,14 +22,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static petrov.kristiyan.colorpicker.ColorUtils.dip2px;
-import static petrov.kristiyan.colorpicker.ColorUtils.getDimensionDp;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 
 public class ColorPicker {
 
-    private OnChooseColorListener onChooseColorListener;
-    private OnFastChooseColorListener onFastChooseColorListener;
+    protected OnChooseColorListener onChooseColorListener;
+    protected OnFastChooseColorListener onFastChooseColorListener;
 
     public interface OnChooseColorListener {
         void onChooseColor(int position, int color);
@@ -47,51 +47,61 @@ public class ColorPicker {
         void onClick(View v, int position, int color);
     }
 
-    private ArrayList<ColorPal> colors;
-    private ColorViewAdapter colorViewAdapter;
-    private boolean fastChooser;
-    private TypedArray ta;
-    private WeakReference<Activity> mContext;
-    private int columns;
-    private String title;
-    private int marginLeft, marginRight, marginTop, marginBottom;
-    private int tickColor;
-    private int marginColorButtonLeft, marginColorButtonRight, marginColorButtonTop, marginColorButtonBottom;
-    private int colorButtonWidth, colorButtonHeight;
-    private int colorButtonDrawable;
-    private String negativeText, positiveText;
-    private boolean roundColorButton;
-    private boolean dismiss;
-    private boolean fullHeight;
-    private WeakReference<CustomDialog> mDialog;
-    private RecyclerView recyclerView;
-    private RelativeLayout colorpicker_base;
-    private LinearLayout buttons_layout;
-    private int default_color;
-    private int paddingTitleLeft, paddingTitleRight, paddingTitleBottom, paddingTitleTop;
-    private View dialogViewLayout;
-    private boolean disableDefaultButtons;
-    private AppCompatButton positiveButton, negativeButton;
+    protected ArrayList<ColorPal> colors;
+    protected ColorViewAdapter colorViewAdapter;
+    protected boolean fastChooser;
+    protected TypedArray ta;
+    protected WeakReference<Activity> mContext;
+    protected int columns;
+    protected String title;
+    protected int marginLeft;
+    protected int marginRight;
+    protected int marginTop;
+    protected int marginBottom;
+    protected int tickColor;
+    protected int marginColorButtonLeft;
+    protected int marginColorButtonRight;
+    protected int marginColorButtonTop;
+    protected int marginColorButtonBottom;
+    protected int colorButtonWidth, colorButtonHeight;
+    protected int colorButtonDrawable;
+    protected String negativeText;
+    protected String positiveText;
+    protected boolean roundColorButton;
+    protected boolean dismiss;
+    protected boolean fullHeight;
+    protected WeakReference<CustomDialog> mDialog;
+    protected RecyclerView recyclerView;
+    protected RelativeLayout colorpicker_base;
+    protected LinearLayout buttons_layout;
+    protected int default_color;
+    protected int paddingTitleLeft, paddingTitleRight, paddingTitleBottom, paddingTitleTop;
+    protected View dialogViewLayout;
+    protected boolean disableDefaultButtons;
+    protected AppCompatButton positiveButton;
+    protected AppCompatButton negativeButton;
 
     /**
      * Constructor
      */
-    public ColorPicker(Activity context) {
-        dialogViewLayout = LayoutInflater.from(context).inflate(R.layout.color_palette_layout, null, false);
-        colorpicker_base = dialogViewLayout.findViewById(R.id.colorpicker_base);
-        recyclerView = dialogViewLayout.findViewById(R.id.color_palette);
-        buttons_layout = dialogViewLayout.findViewById(R.id.buttons_layout);
-        positiveButton = dialogViewLayout.findViewById(R.id.positive);
-        negativeButton = dialogViewLayout.findViewById(R.id.negative);
+    public ColorPicker(Activity context, boolean inflate) {
+        if (inflate) {
+            dialogViewLayout = LayoutInflater.from(context).inflate(R.layout.color_palette_layout, null, false);
+            colorpicker_base = dialogViewLayout.findViewById(R.id.colorpicker_base);
+            recyclerView = dialogViewLayout.findViewById(R.id.color_palette);
+            buttons_layout = dialogViewLayout.findViewById(R.id.buttons_layout);
+            positiveButton = dialogViewLayout.findViewById(R.id.positive);
+            negativeButton = dialogViewLayout.findViewById(R.id.negative);
 
-        this.mContext = new WeakReference<>(context);
-        this.dismiss = true;
-        this.marginColorButtonLeft = this.marginColorButtonTop = this.marginColorButtonRight = this.marginColorButtonBottom = 5;
-        this.title = context.getString(R.string.colorpicker_dialog_title);
-        this.negativeText = context.getString(R.string.colorpicker_dialog_cancel);
-        this.positiveText = context.getString(R.string.colorpicker_dialog_ok);
-        this.default_color = 0;
-        this.columns = 5;
+            this.mContext = new WeakReference<>(context);
+            this.dismiss = true;
+            this.marginColorButtonLeft = this.marginColorButtonTop = this.marginColorButtonRight = this.marginColorButtonBottom = 5;
+            this.title = context.getString(R.string.colorpicker_dialog_title);
+            this.negativeText = context.getString(R.string.colorpicker_dialog_cancel);
+            this.positiveText = context.getString(R.string.colorpicker_dialog_ok);
+            this.default_color = 0;
+            this.columns = 5;
+        }
     }
 
     /**
@@ -563,7 +573,7 @@ public class ColorPicker {
      *
      * @return this
      */
-    private ColorPicker setColors() {
+    protected ColorPicker setColors() {
         if (mContext == null)
             return this;
 
@@ -579,7 +589,7 @@ public class ColorPicker {
         return this;
     }
 
-    private ColorPicker setMargin(int left, int top, int right, int bottom) {
+    protected ColorPicker setMargin(int left, int top, int right, int bottom) {
         this.marginLeft = left;
         this.marginRight = right;
         this.marginTop = top;

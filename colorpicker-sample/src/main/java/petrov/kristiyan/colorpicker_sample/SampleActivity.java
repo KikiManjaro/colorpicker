@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-import androidx.appcompat.app.AppCompatActivity;
 import petrov.kristiyan.colorpicker.ColorPicker;
+import petrov.kristiyan.colorpicker.DoubleColorPicker;
 
 
 public class SampleActivity extends AppCompatActivity {
@@ -25,7 +27,7 @@ public class SampleActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final ColorPicker colorPicker = new ColorPicker(SampleActivity.this);
+                    DoubleColorPicker colorPicker = new DoubleColorPicker(SampleActivity.this);
                     ArrayList<String> colors = new ArrayList<>();
                     colors.add("#82B926");
                     colors.add("#a276eb");
@@ -36,28 +38,33 @@ public class SampleActivity extends AppCompatActivity {
                     colors.add("#FA9F00");
                     colors.add("#FF0000");
 
-                    colorPicker
+                    ((DoubleColorPicker) (colorPicker)
+                            .setTitle("First")
                             .setDefaultColorButton(Color.parseColor("#f84c44"))
                             .setColors(colors)
                             .setColumns(5)
                             .setRoundColorButton(true)
-                            .setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
-                                @Override
-                                public void onChooseColor(int position, int color) {
-                                    Log.d("position", "" + position);// will be fired only when OK button was tapped
-                                }
-
-                                @Override
-                                public void onCancel() {
-
-                                }
-                            })
                             .addListenerButton("newButton", new ColorPicker.OnButtonListener() {
                                 @Override
                                 public void onClick(View v, int position, int color) {
                                     Log.d("position", "" + position);
                                 }
-                            }).show();
+                            }))
+                            .setDefaultDoubleColorButton(Color.parseColor("#f84c44"))
+                            .setSecondTitle("Second")
+                            .setOnChooseDoubleColorListener(new DoubleColorPicker.OnChooseDoubleColorListener() {
+                                @Override
+                                public void onChooseColor(int position, int color, int position2, int color2) {
+                                    System.out.printf("Clicked");
+                                    Log.d("position", "" + position);// will be fired only when OK button was tapped
+                                    Log.d("position2", "" + position2);// will be fired only when OK button was tapped
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                }
+                            })
+                            .show();
                 }
             });
         }
