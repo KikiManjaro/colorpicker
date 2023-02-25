@@ -3,6 +3,8 @@ package petrov.kristiyan.colorpicker;
 import static petrov.kristiyan.colorpicker.ColorUtils.dip2px;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -13,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 public class DoubleColorPicker extends ColorPicker{
     protected String title2;
@@ -23,6 +26,8 @@ public class DoubleColorPicker extends ColorPicker{
     private OnChooseDoubleColorListener onChooseDoubleColorListener;
 
     protected ColorViewAdapter colorViewAdapter2;
+
+    protected ArrayList<ColorPal> colors2;
 
     public interface OnChooseDoubleColorListener {
         void onChooseColor(int position, int color, int position2, int color2);
@@ -53,16 +58,72 @@ public class DoubleColorPicker extends ColorPicker{
     }
 
     @Override
+    public ColorPicker setColors(int resId) {
+        if (mContext == null)
+            return this;
+
+        Context context = mContext.get();
+        if (context == null)
+            return this;
+
+        ta = context.getResources().obtainTypedArray(resId);
+        colors = new ArrayList<>();
+        for (int i = 0; i < ta.length(); i++) {
+            colors.add(new ColorPal(ta.getColor(i, 0), false));
+        }
+        colors2 = new ArrayList<>();
+        for (int i = 0; i < ta.length(); i++) {
+            colors2.add(new ColorPal(ta.getColor(i, 0), false));
+        }
+
+        return this;
+    }
+
+    @Override
+    public DoubleColorPicker setColors(ArrayList<String> colorsHexList) {
+        colors = new ArrayList<>();
+        for (int i = 0; i < colorsHexList.size(); i++) {
+            colors.add(new ColorPal(Color.parseColor(colorsHexList.get(i)), false));
+        }
+        colors2 = new ArrayList<>();
+        for (int i = 0; i < colorsHexList.size(); i++) {
+            colors2.add(new ColorPal(Color.parseColor(colorsHexList.get(i)), false));
+        }
+        return this;
+    }
+
+    @Override
+    public ColorPicker setColors(int... colorsList) {
+        colors = new ArrayList<>();
+        for (int aColorsList : colorsList) {
+            colors.add(new ColorPal(aColorsList, false));
+        }
+        colors2 = new ArrayList<>();
+        for (int aColorsList : colorsList) {
+            colors2.add(new ColorPal(aColorsList, false));
+        }
+        return this;
+    }
+
+    @Override
     public void show() {
         super.show();
         Activity context = mContext.get();
 
+//        colors2 = (ArrayList<ColorPal>) colors.clone();
+//
+//        ta = context.getResources().obtainTypedArray(R.array.default_colors);
+//        colors2 = new ArrayList<>();
+//        for (int i = 0; i < ta.length(); i++) {
+//            colors2.add(new ColorPal(ta.getColor(i, 0), false));
+//        }
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, columns);
         recyclerView2.setLayoutManager(gridLayoutManager);
         if (fastChooser)
-            colorViewAdapter2 = new ColorViewAdapter(colors, onFastChooseColorListener, mDialog);
+            colorViewAdapter2 = new ColorViewAdapter(colors2, onFastChooseColorListener, mDialog);
         else
-            colorViewAdapter2 = new ColorViewAdapter(colors);
+            colorViewAdapter2 = new ColorViewAdapter(colors2);
 
         if (fullHeight) {
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);

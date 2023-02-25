@@ -40,8 +40,7 @@ public class SampleActivity extends AppCompatActivity {
 
                     ((DoubleColorPicker) (colorPicker)
                             .setTitle("First")
-                            .setDefaultColorButton(Color.parseColor("#f84c44"))
-                            .setColors(colors)
+                            .setDefaultColorButton(Color.parseColor("#82B926"))
                             .setColumns(5)
                             .setRoundColorButton(true)
                             .addListenerButton("newButton", new ColorPicker.OnButtonListener() {
@@ -50,7 +49,8 @@ public class SampleActivity extends AppCompatActivity {
                                     Log.d("position", "" + position);
                                 }
                             }))
-                            .setDefaultDoubleColorButton(Color.parseColor("#f84c44"))
+                            .setColors(colors)
+                            .setDefaultDoubleColorButton(Color.parseColor("#a276eb"))
                             .setSecondTitle("Second")
                             .setOnChooseDoubleColorListener(new DoubleColorPicker.OnChooseDoubleColorListener() {
                                 @Override
